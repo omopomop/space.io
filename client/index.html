@@ -1,4 +1,4 @@
-<canvas id="ctx" width="1000" height="600" style="border:1px
+<canvas id="ctx" width="600" height="600" style="border:1px
 solid #000000;"></canvas>
 
 <script src="http://cdn.socket.io/socket.io-1.4.5.js"
@@ -15,11 +15,14 @@ solid #000000;"></canvas>
 	ctx.fillStyle = 'white';
 	var socket = io();
 	socket.on('newPositions',function(data){
-		ctx.clearRect(0,0,1000,600);
+		ctx.clearRect(0,0,600,600);
 		drawMap();
-		for(var i = 0; i < data.length;i++){
-			
-			ctx.fillText(data[i].number,data[i].x,data[i].y);
+		for(var i = 0; i < data.player.length;i++){
+			ctx.fillText(data.player[i].number,data.player[i].x,data.player[i].y);
+		}
+		
+		for(var i = 0; i < data.star.length;i++){
+			ctx.fillRect(data.star[i].x,data.star[i].y,4,4);
 		}
 	});
 	/*

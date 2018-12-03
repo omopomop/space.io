@@ -14,8 +14,8 @@ var SOCKET_LIST = {};
 var playerCount = 0;
 var Entity = function(){
 	var self = {
-		x:Math.floor(Math.random()*300)+10,
-		y:Math.floor(Math.random()*300)+10,
+		x:Math.floor(Math.random()*600)+10,
+		y:Math.floor(Math.random()*600)+10,
 		spdX:0,
 		spdY:0,
 		id:"",
@@ -149,11 +149,57 @@ io.sockets.on('connection',function(socket){
 	
 	
 });
-
+var Star = function(){
+	var self = Entity();
+	
+	self.id = Math.random();
+	self.pointmultiplier = 1;
+	self.timer = 0;
+	var super_update = self.update;
+	
+	self.update = function(){
+		self.updateSpd();
+		if(self.timer++>200){
+			self.pointmultiplier+=1;
+			self.timer = 0;
+		}
+		super_update();
+	}
+	self.updateSpd = function(){
+		var plusOrMinus = Math.round(Math.random()) * 2 - 1;
+		self.spdX = plusOrMinus*((Math.random()));
+		plusOrMinus = Math.random() < 0.5 ? -1 : 1;
+		self.spdY = plusOrMinus *((Math.random()));
+	}
+	Star.list[self.id] = self;
+	return self;
+}
+Star.list = {};
+Star.update = function(){
+	if(Math.random() < .02){
+		Star();
+	}
+	var pack = [];
+	for(var i in Star.list){
+		var star = Star.list[i];
+		star.update();
+		pack.push({
+			x:star.x,
+			y:star.y,
+		});
+	}
+	return pack;
+}
 setInterval(function(){
-	var pack = Player.update();
+	var pack = {
+		player:Player.update(),
+		star:Star.update(),
+		
+	}
 	for(var i in SOCKET_LIST){
 		var socket = SOCKET_LIST[i];
 		socket.emit('newPositions',pack);
 	}
 },1000/25);
+
+
