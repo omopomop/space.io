@@ -13,6 +13,7 @@ var SOCKET_LIST = {};
 
 var playerCount = 0;
 var Entity = function(){
+	//simple entity containing x and y coordinates, a unique identifier, and its speed
 	var self = {
 		x:Math.floor(Math.random()*600)+10,
 		y:Math.floor(Math.random()*600)+10,
@@ -20,10 +21,16 @@ var Entity = function(){
 		spdY:0,
 		id:"",
 	}
+	//update the position based off speed
 	self.update = function(){
 		self.x += self.spdX;
 		self.y += self.spdY;
 	}
+	//returns distance between current entity and the passed in object
+	self.getDistance = function(obj){
+		return Math.sqrt(Math.pow(self.x-obj.x,2)+Math.pow(self.y-obj.y,2))
+	}
+	
 	return self;
 	
 }
@@ -164,7 +171,11 @@ var Star = function(){
 			self.timer = 0;
 		}
 		super_update();
+		
+		for(var i in 
 	}
+		
+	//gives stars a small jitter
 	self.updateSpd = function(){
 		var plusOrMinus = Math.round(Math.random()) * 2 - 1;
 		self.spdX = plusOrMinus*((Math.random()));
