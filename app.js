@@ -101,6 +101,12 @@ var Player = function(id){
 		
 	}
 	Player.list[id] = self;
+	initPack.player.push({
+		id:self.id,
+		x:self.x,
+		y:self.y,
+		number:self.number,
+	});
 	return self;
 }
 Player.list = {};
@@ -125,6 +131,7 @@ Player.onConnect = function(socket){
 }
 Player.onDisconnect = function(socket){
 	delete Player.list[socket.id];
+	deletePack.player.push(socket.id);
 	playerCount--;
 }
 Player.update = function(){
@@ -135,7 +142,7 @@ Player.update = function(){
 		pack.push({
 			x:player.x,
 			y:player.y,
-			number:player.number
+			id:player.id,
 		});
 	}
 	return pack;
@@ -192,6 +199,11 @@ var Star = function(){
 		self.spdY = plusOrMinus *((Math.random()));
 	}
 	Star.list[self.id] = self;
+	initPack.star.push({
+		id:self.id,
+		x:self.x,
+		y:self.y,
+	});
 	return self;
 }
 Star.list = {};
@@ -207,16 +219,22 @@ Star.update = function(){
 		if(star.remove){
 			//console.log("deleting stars");
 			delete Star.list[i];
+			deletePack.star.push(star.id);
 			starCount--;
 		}
 		else
 			pack.push({
+				id:star.id,
 				x:star.x,
 				y:star.y,
 			});
 	}
 	return pack;
 }
+var initPack = {player:[], star:[]};
+var deletePack = {player:[], star:[]};
+
+
 setInterval(function(){
 	var pack = {
 		player:Player.update(),
@@ -225,8 +243,17 @@ setInterval(function(){
 	}
 	for(var i in SOCKET_LIST){
 		var socket = SOCKET_LIST[i];
-		socket.emit('newPositions',pack);
+		socket.emit('init',initPack);
+		socket.emit('update',pack);
+		socket.emit('delete',deletePack);
 	}
+	for(var i in initPack.player){
+		console.log("INIT PLAYER IS "+initPack.player[i].number);
+	}
+	initPack.player = [];
+	initPack.star = [];
+	deletePack.player = [];
+	deletePack.star = [];
 },1000/25);
 
 

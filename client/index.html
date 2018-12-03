@@ -28,7 +28,6 @@ solid #000000;"></canvas>
 	var Star = function(iPack){
 		var self = {};
 		self.id = iPack.id;
-		self.number = iPack.number;
 		self.x = iPack.x;
 		self.y = iPack.y;
 		Star.list[self.id] = self;
@@ -38,16 +37,18 @@ solid #000000;"></canvas>
 	
 	var socket = io();
 	
-	socket.on('init',function(data)){
+	socket.on('init',function(data){
+		
 		for(var i = 0; i < data.player.length; i++){
 			new Player(data.player[i]);
+			//socket.emit('playercreated');
 		}
 		for(var i = 0; i < data.star.length; i++){
 			new Star(data.star[i]);
 		}
-	}
+	});
 	
-	socket.on('update',function(data)){
+	socket.on('update',function(data){
 		for(var i = 0; i < data.player.length; i++){
 			var pack = data.player[i];
 			var p = Player.list[pack.id];
@@ -60,7 +61,7 @@ solid #000000;"></canvas>
 		}
 		for(var i = 0; i < data.star.length; i++){
 			var pack = data.star[i];
-			var p = Star.list[pack.id];
+			var s = Star.list[pack.id];
 			if(s){
 				if(pack.x !== undefined)
 					s.x = pack.x;
@@ -68,25 +69,25 @@ solid #000000;"></canvas>
 					s.y = pack.y;
 			}
 		}
-	}
+	});
 	
-	socket.on('delete',function(data)){
+	socket.on('delete',function(data){
 		for(var i = 0; i < data.player.length; i++)
 			delete Player.list[data.player[i]];
 		for(var i = 0; i < data.star.length; i++)
 			delete Star.list[data.star[i]];
-	}
+	});
 	
 	setInterval(function(){
 		ctx.clearRect(0,0,600,600);
 		drawMap();
-		for(var i in Player.list)
+		for(var i in Player.list){
 			ctx.fillText(Player.list[i].number,Player.list[i].x,Player.list[i].y);
+		}
 		for(var i in Star.list)
-			ctx.fillText(Star.list[i].number,Star.list[i].x,Star.list[i].y);
+			ctx.fillRect(Star.list[i].x-2,Star.list[i].y-2,4,4);
 	},40);
-	
-	
+		
 	var drawMap = function(){
 		ctx.drawImage(Img.map,0,0);
 	}
