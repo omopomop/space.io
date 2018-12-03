@@ -47,6 +47,29 @@ solid #000000;"></canvas>
 		}
 	}
 	
+	socket.on('update',function(data)){
+		for(var i = 0; i < data.player.length; i++){
+			var pack = data.player[i];
+			var p = Player.list[pack.id];
+			if(p){
+				if(pack.x !== undefined)
+					p.x = pack.x;
+				if(pack.y !== undefined)
+					p.y = pack.y;
+			}
+		}
+		for(var i = 0; i < data.star.length; i++){
+			var pack = data.star[i];
+			var p = Star.list[pack.id];
+			if(s){
+				if(pack.x !== undefined)
+					s.x = pack.x;
+				if(pack.y !== undefined)
+					s.y = pack.y;
+			}
+		}
+	}
+	
 	socket.on('newPositions',function(data){
 		ctx.clearRect(0,0,600,600);
 		drawMap();
