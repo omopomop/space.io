@@ -77,17 +77,15 @@ solid #000000;"></canvas>
 			delete Star.list[data.star[i]];
 	}
 	
-	socket.on('newPositions',function(data){
+	setInterval(function(){
 		ctx.clearRect(0,0,600,600);
 		drawMap();
-		for(var i = 0; i < data.player.length;i++){
-			ctx.fillText(data.player[i].number,data.player[i].x,data.player[i].y);
-		}
-		
-		for(var i = 0; i < data.star.length;i++){
-			ctx.fillRect(data.star[i].x,data.star[i].y,4,4);
-		}
-	});
+		for(var i in Player.list)
+			ctx.fillText(Player.list[i].number,Player.list[i].x,Player.list[i].y);
+		for(var i in Star.list)
+			ctx.fillText(Star.list[i].number,Star.list[i].x,Star.list[i].y);
+	},40);
+	
 	
 	var drawMap = function(){
 		ctx.drawImage(Img.map,0,0);
