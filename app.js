@@ -45,7 +45,7 @@ var Player = function(id){
 	self.lb = false;
 	self.ub = false;
 	self.db = false;
-	self.maxSpd = 10;
+	self.maxSpd = 5;
 	self.accelHoriz = .2;
 	self.accelVert = .2;
 	
