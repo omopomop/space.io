@@ -9,6 +9,10 @@ solid #000000;"></canvas>
 	var Img = {};
 	Img.map = new Image();
 	Img.map.src = '/client/img/map.png';
+	Img.ship = new Image();
+	Img.ship.src = '/client/img/ship.png';
+	Img.star = new Image();
+	Img.star.src = '/client/img/star.png';
 	
 	var ctx = document.getElementById("ctx").getContext("2d");
 	ctx.font = '30px Arial';
@@ -82,9 +86,12 @@ solid #000000;"></canvas>
 		ctx.clearRect(0,0,600,600);
 		drawMap();
 		for(var i in Player.list){
+			ctx.drawImage(Img.ship,0,0,Img.ship.width,Img.ship.height,Player.list[i].x-25,Player.list[i].y-30,70,50);
+			//ctx.drawImage(Img.ship,Player.list[i].x,Player.list[i].y,Img.ship.width,Img.ship.height,Player.list[i].x,Player.list[i].y,50,50);
 			ctx.fillText(Player.list[i].number,Player.list[i].x,Player.list[i].y);
 		}
 		for(var i in Star.list)
+			ctx.drawImage(Img.star,0,0,Img.star.width,Img.star.height,Star.list[i].x,Star.list[i].y,20,20);
 			ctx.fillRect(Star.list[i].x-2,Star.list[i].y-2,4,4);
 	},40);
 		
