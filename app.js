@@ -12,6 +12,7 @@
 var SOCKET_LIST = {};
 
 var playerCount = 0;
+var starCount = 0;
 var Entity = function(){
 	//simple entity containing x and y coordinates, a unique identifier, and its speed
 	var self = {
@@ -38,6 +39,7 @@ var Player = function(id){
 	var self = Entity();
 
 	self.id = id;
+	self.score = 0;
 	self.number = playerCount;
 	self.rb = false;
 	self.lb = false;
@@ -162,6 +164,7 @@ var Star = function(){
 	self.id = Math.random();
 	self.pointmultiplier = 1;
 	self.timer = 0;
+	self.remove = false;
 	var super_update = self.update;
 	
 	self.update = function(){
@@ -172,7 +175,13 @@ var Star = function(){
 		}
 		super_update();
 		
-		for(var i in 
+		for(var i in Player.list){
+			var player = Player.list[i];
+			if(self.getDistance(player) < 5){
+				self.remove = true;
+				player.score+=self.pointmultiplier;
+			}
+		}
 	}
 		
 	//gives stars a small jitter
@@ -187,17 +196,24 @@ var Star = function(){
 }
 Star.list = {};
 Star.update = function(){
-	if(Math.random() < .02){
+	if(Math.random() < .02 && starCount < 30){
 		Star();
+		starCount++;
 	}
 	var pack = [];
 	for(var i in Star.list){
 		var star = Star.list[i];
 		star.update();
-		pack.push({
-			x:star.x,
-			y:star.y,
-		});
+		if(star.remove){
+			//console.log("deleting stars");
+			delete Star.list[i];
+			starCount--;
+		}
+		else
+			pack.push({
+				x:star.x,
+				y:star.y,
+			});
 	}
 	return pack;
 }
