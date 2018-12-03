@@ -20,11 +20,33 @@ solid #000000;"></canvas>
 		self.number = iPack.number;
 		self.x = iPack.x;
 		self.y = iPack.y;
+		Player.list[self.id] = self;
 		return self;
 	}
 	Player.list = {};
 	
+	var Star = function(iPack){
+		var self = {};
+		self.id = iPack.id;
+		self.number = iPack.number;
+		self.x = iPack.x;
+		self.y = iPack.y;
+		Star.list[self.id] = self;
+		return self;
+	}
+	Star.list = {};
+	
 	var socket = io();
+	
+	socket.on('init',function(data)){
+		for(var i = 0; i < data.player.length; i++){
+			new Player(data.player[i]);
+		}
+		for(var i = 0; i < data.star.length; i++){
+			new Star(data.star[i]);
+		}
+	}
+	
 	socket.on('newPositions',function(data){
 		ctx.clearRect(0,0,600,600);
 		drawMap();
