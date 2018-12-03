@@ -13,6 +13,17 @@ solid #000000;"></canvas>
 	var ctx = document.getElementById("ctx").getContext("2d");
 	ctx.font = '30px Arial';
 	ctx.fillStyle = 'white';
+	
+	var Player = function(iPack){
+		var self = {};
+		self.id = iPack.id;
+		self.number = iPack.number;
+		self.x = iPack.x;
+		self.y = iPack.y;
+		return self;
+	}
+	Player.list = {};
+	
 	var socket = io();
 	socket.on('newPositions',function(data){
 		ctx.clearRect(0,0,600,600);
@@ -25,12 +36,7 @@ solid #000000;"></canvas>
 			ctx.fillRect(data.star[i].x,data.star[i].y,4,4);
 		}
 	});
-	/*
-	setInterval(function(){
 	
-		drawMap();
-	},40);
-	*/
 	var drawMap = function(){
 		ctx.drawImage(Img.map,0,0);
 	}
