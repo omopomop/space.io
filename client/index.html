@@ -24,6 +24,15 @@ solid #000000;"></canvas>
 		self.number = iPack.number;
 		self.x = iPack.x;
 		self.y = iPack.y;
+		self.score = iPack.score;
+		
+		self.draw = function(){
+			ctx.drawImage(Img.ship,0,0,Img.ship.width,Img.ship.height,self.x-25,self.y-30,70,50);
+			ctx.fillText(self.number,self.x,self.y);
+			ctx.fillText(self.score,self.x,self.y-40);
+		}
+		
+		
 		Player.list[self.id] = self;
 		return self;
 	}
@@ -34,6 +43,12 @@ solid #000000;"></canvas>
 		self.id = iPack.id;
 		self.x = iPack.x;
 		self.y = iPack.y;
+		
+		self.draw = function(){
+			ctx.drawImage(Img.star,0,0,Img.star.width,Img.star.height,self.x,self.y,20,20);
+			//ctx.fillRect(self.x-2,self.y-2,4,4);
+		}
+		
 		Star.list[self.id] = self;
 		return self;
 	}
@@ -61,6 +76,8 @@ solid #000000;"></canvas>
 					p.x = pack.x;
 				if(pack.y !== undefined)
 					p.y = pack.y;
+				if(pack.score !== undefined)
+					p.score = pack.score;
 			}
 		}
 		for(var i = 0; i < data.star.length; i++){
@@ -86,13 +103,10 @@ solid #000000;"></canvas>
 		ctx.clearRect(0,0,600,600);
 		drawMap();
 		for(var i in Player.list){
-			ctx.drawImage(Img.ship,0,0,Img.ship.width,Img.ship.height,Player.list[i].x-25,Player.list[i].y-30,70,50);
-			//ctx.drawImage(Img.ship,Player.list[i].x,Player.list[i].y,Img.ship.width,Img.ship.height,Player.list[i].x,Player.list[i].y,50,50);
-			ctx.fillText(Player.list[i].number,Player.list[i].x,Player.list[i].y);
+			Player.list[i].draw();
 		}
 		for(var i in Star.list)
-			ctx.drawImage(Img.star,0,0,Img.star.width,Img.star.height,Star.list[i].x,Star.list[i].y,20,20);
-			ctx.fillRect(Star.list[i].x-2,Star.list[i].y-2,4,4);
+			Star.list[i].draw();
 	},40);
 		
 	var drawMap = function(){

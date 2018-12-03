@@ -106,6 +106,7 @@ var Player = function(id){
 			x:self.x,
 			y:self.y,
 			number:self.number,
+			score:self.score,
 		};
 	}
 	self.getUpdatePack = function(){
@@ -113,6 +114,7 @@ var Player = function(id){
 			x:self.x,
 			y:self.y,
 			id:self.id,
+			score:self.score,
 		};
 	}
 	Player.list[id] = self;
