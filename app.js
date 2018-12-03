@@ -108,12 +108,12 @@ var Player = function(id){
 			number:self.number,
 		};
 	}
-	self.getUpdatePak = function(){
+	self.getUpdatePack = function(){
 		return{
 			x:self.x,
 			y:self.y,
 			id:self.id,
-		}
+		};
 	}
 	Player.list[id] = self;
 	initPack.player.push(self.getInitPack());
@@ -138,7 +138,23 @@ Player.onConnect = function(socket){
 			player.db = data.state;
 		}
 	});
+	
+	
+	
+	socket.emit('init',{
+		player:Player.fullInit(),
+		star:Star.fullInit(),
+	});
 }
+Player.fullInit = function(){
+	var players = [];
+	for(var i in Player.list){
+		players.push(Player.list[i].getInitPack());
+	}
+	return players;
+}
+
+
 Player.onDisconnect = function(socket){
 	delete Player.list[socket.id];
 	deletePack.player.push(socket.id);
@@ -149,7 +165,7 @@ Player.update = function(){
 	for(var i in Player.list){
 		var player = Player.list[i];
 		player.update();
-		pack.push(self.getUpdatePack());
+		pack.push(player.getUpdatePack());
 	}
 	return pack;
 }
@@ -216,13 +232,20 @@ var Star = function(){
 			id:self.id,
 			x:self.x,
 			y:self.y,
-		}
+		};
 	}
 	Star.list[self.id] = self;
 	initPack.star.push(self.getInitPack());
 	return self;
 }
 Star.list = {};
+Star.fullInit = function(){
+	var stars = [];
+	for(var i in Star.list){
+		stars.push(Star.list[i].getInitPack());
+	}
+	return stars;
+}
 Star.update = function(){
 	if(Math.random() < .02 && starCount < 30){
 		Star();
@@ -239,7 +262,7 @@ Star.update = function(){
 			starCount--;
 		}
 		else
-			pack.push(self.getUpdatePack());
+			pack.push(star.getUpdatePack());
 	}
 	return pack;
 }
