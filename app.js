@@ -177,7 +177,7 @@ var Star = function(){
 		
 		for(var i in Player.list){
 			var player = Player.list[i];
-			if(self.getDistance(player) < 5){
+			if(self.getDistance(player) < 20){
 				self.remove = true;
 				player.score+=self.pointmultiplier;
 			}
