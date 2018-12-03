@@ -70,6 +70,13 @@ solid #000000;"></canvas>
 		}
 	}
 	
+	socket.on('delete',function(data)){
+		for(var i = 0; i < data.player.length; i++)
+			delete Player.list[data.player[i]];
+		for(var i = 0; i < data.star.length; i++)
+			delete Star.list[data.star[i]];
+	}
+	
 	socket.on('newPositions',function(data){
 		ctx.clearRect(0,0,600,600);
 		drawMap();
