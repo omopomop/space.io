@@ -100,13 +100,23 @@ var Player = function(id){
 		}
 		
 	}
+	self.getInitPack = function(){
+		return{
+			id:self.id,
+			x:self.x,
+			y:self.y,
+			number:self.number,
+		};
+	}
+	self.getUpdatePak = function(){
+		return{
+			x:self.x,
+			y:self.y,
+			id:self.id,
+		}
+	}
 	Player.list[id] = self;
-	initPack.player.push({
-		id:self.id,
-		x:self.x,
-		y:self.y,
-		number:self.number,
-	});
+	initPack.player.push(self.getInitPack());
 	return self;
 }
 Player.list = {};
@@ -139,11 +149,7 @@ Player.update = function(){
 	for(var i in Player.list){
 		var player = Player.list[i];
 		player.update();
-		pack.push({
-			x:player.x,
-			y:player.y,
-			id:player.id,
-		});
+		pack.push(self.getUpdatePack());
 	}
 	return pack;
 }
@@ -198,12 +204,22 @@ var Star = function(){
 		plusOrMinus = Math.random() < 0.5 ? -1 : 1;
 		self.spdY = plusOrMinus *((Math.random()));
 	}
+	self.getInitPack = function(){
+		return {
+			id:self.id,
+			x:self.x,
+			y:self.y,
+		};
+	}
+	self.getUpdatePack = function(){
+		return{
+			id:self.id,
+			x:self.x,
+			y:self.y,
+		}
+	}
 	Star.list[self.id] = self;
-	initPack.star.push({
-		id:self.id,
-		x:self.x,
-		y:self.y,
-	});
+	initPack.star.push(self.getInitPack());
 	return self;
 }
 Star.list = {};
@@ -223,11 +239,7 @@ Star.update = function(){
 			starCount--;
 		}
 		else
-			pack.push({
-				id:star.id,
-				x:star.x,
-				y:star.y,
-			});
+			pack.push(self.getUpdatePack());
 	}
 	return pack;
 }
