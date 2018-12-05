@@ -13,6 +13,8 @@ var SOCKET_LIST = {};
 
 var playerCount = 0;
 var starCount = 0;
+var rocketCount = 0;
+
 var Entity = function(){
 	//simple entity containing x and y coordinates, a unique identifier, and its speed
 	var self = {
@@ -35,6 +37,54 @@ var Entity = function(){
 	return self;
 	
 }
+
+var Rocket = function(id){
+	var self = Entity();
+	self.id = id;
+
+
+	
+	var super_update = self.update;
+	self.update = function(){
+		//updates speed
+		//self.updateSpd();
+		//updates position in entity
+		super_update();
+	}
+
+	self.getInitPack = function(){
+		return{
+			id:self.id,
+			x:self.x,
+			y:self.y,
+		};
+	}
+
+	self.getUpdatePack = function(){
+		return{
+			x:self.x,
+			y:self.y,
+			id:self.id,
+		};
+	}
+	
+	Rocket.list[id] = self;
+	initPack.rocket.push(self.getInitPack());
+	return self;
+
+
+}
+Rocket.list = {};
+Rocket.update = function(){
+	var pack=[];
+	for(var i in Rocket.list){
+		var rocket = Rocket.list[i];
+		rocket.update();
+		pack.push(rocket.getUpdatePack());
+	}
+	return pack;
+}
+
 var Player = function(id){
 	var self = Entity();
 
@@ -138,6 +188,9 @@ Player.onConnect = function(socket){
 		}
 		else if(data.inputId==='d'){
 			player.db = data.state;
+		}else if(data.inputId==='f'){
+			var rocket = Rocket(socket.id);
+			rocketCount++;
 		}
 	});
 	
@@ -146,8 +199,28 @@ Player.onConnect = function(socket){
 	socket.emit('init',{
 		player:Player.fullInit(),
 		star:Star.fullInit(),
+		rocket:Rocket.fullInit(),
 	});
 }
+
+Rocket.fullInit = function(){
+	var rockets = {};
+	for(var i in Rocket.list){
+		rockets.push(Rocket.list[i].getInitPack());
+	}
+	return rockets;
+}
+
+Rocket.update = function(){
+	var pack=[];
+	for(var i in Rocket.list){
+		var rocket = Rocket.list[i];
+		rocket.update();
+		pack.push(rocket.getUpdatePack());
+	}
+	return pack;
+}
+
 Player.fullInit = function(){
 	var players = [];
 	for(var i in Player.list){
@@ -268,14 +341,15 @@ Star.update = function(){
 	}
 	return pack;
 }
-var initPack = {player:[], star:[]};
-var deletePack = {player:[], star:[]};
+var initPack = {player:[], star:[], rocket: []};
+var deletePack = {player:[], star:[], rocket: []};
 
 
 setInterval(function(){
 	var pack = {
 		player:Player.update(),
 		star:Star.update(),
+		rocket:Rocket.update(),
 		
 	}
 	for(var i in SOCKET_LIST){
@@ -289,8 +363,10 @@ setInterval(function(){
 	}
 	initPack.player = [];
 	initPack.star = [];
+	initPack.rocket = [];
 	deletePack.player = [];
 	deletePack.star = [];
+	deletePack.rocket = [];
 },1000/25);
 
 
