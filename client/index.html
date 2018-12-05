@@ -12,8 +12,14 @@ solid #000000;"></canvas>
 	Img.map.src = '/client/img/map.png';
 	Img.ship = new Image();
 	Img.ship.src = '/client/img/ship.png';
-	Img.star = new Image();
-	Img.star.src = '/client/img/star.png';
+	Img.star1 = new Image();
+	Img.star1.src = '/client/img/star1.png';
+	Img.star2 = new Image();
+	Img.star2.src = '/client/img/star2.png';
+	Img.star3 = new Image();
+	Img.star3.src = '/client/img/star3.png';
+	Img.star4 = new Image();
+	Img.star4.src = '/client/img/star4.png';
 	
 	var ctx = document.getElementById("ctx").getContext("2d");
 	ctx.font = '30px Arial';
@@ -48,13 +54,20 @@ solid #000000;"></canvas>
 		self.id = iPack.id;
 		self.x = iPack.x;
 		self.y = iPack.y;
+		self.points = iPack.points;
 		
 		self.draw = function(){
 			var x = self.x - Player.list[playerId].x + WIDTH/2;
 			var y = self.y - Player.list[playerId].y + HEIGHT/2;
 			
-			
-			ctx.drawImage(Img.star,0,0,Img.star.width,Img.star.height,x,y,20,20);
+			if(self.points>2)
+				ctx.drawImage(Img.star1,0,0,Img.star1.width,Img.star1.height,x,y,20,20);
+			if(self.points>4)
+				ctx.drawImage(Img.star2,0,0,Img.star2.width,Img.star2.height,x,y,20,20);
+			if(self.points>9)
+				ctx.drawImage(Img.star3,0,0,Img.star3.width,Img.star3.height,x,y,20,20);
+			if(self.points>19)
+				ctx.drawImage(Img.star4,0,0,Img.star4.width,Img.star4.height,x,y,20,20);
 			//ctx.fillRect(self.x-2,self.y-2,4,4);
 		}
 		
@@ -102,6 +115,7 @@ solid #000000;"></canvas>
 				if(pack.y !== undefined)
 					s.y = pack.y;
 			}
+			s.points = pack.points;
 		}
 	});
 	

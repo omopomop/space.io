@@ -244,6 +244,7 @@ var Star = function(){
 			id:self.id,
 			x:self.x,
 			y:self.y,
+			points:self.pointmultiplier,
 		};
 	}
 	self.getUpdatePack = function(){
@@ -251,6 +252,7 @@ var Star = function(){
 			id:self.id,
 			x:self.x,
 			y:self.y,
+			points:self.pointmultiplier,
 		};
 	}
 	Star.list[self.id] = self;
@@ -301,8 +303,8 @@ setInterval(function(){
 		socket.emit('update',pack);
 		socket.emit('delete',deletePack);
 	}
-	for(var i in initPack.player){
-		console.log("INIT PLAYER IS "+initPack.player[i].number);
+	for(var i in initPack.star){
+		console.log("INIT PLAYER IS "+initPack.star[i].points);
 	}
 	initPack.player = [];
 	initPack.star = [];
