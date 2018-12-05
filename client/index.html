@@ -29,7 +29,7 @@ solid #000000;"></canvas>
 		
 		self.draw = function(){
 		
-		
+	
 			
 			ctx.drawImage(Img.ship,0,0,Img.ship.width,Img.ship.height,x-25,y-30,70,50);
 			ctx.fillText(self.number,x,y);
@@ -49,7 +49,8 @@ solid #000000;"></canvas>
 		self.y = iPack.y;
 		
 		self.draw = function(){
-			
+			var x = self.x - Player.list[playerId].x + WIDTH/2;
+			var y = self.y - Player.list[playerId].y + HEIGHT/2;
 			
 			
 			ctx.drawImage(Img.star,0,0,Img.star.width,Img.star.height,x,y,20,20);
