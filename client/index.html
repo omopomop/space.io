@@ -29,7 +29,8 @@ solid #000000;"></canvas>
 		
 		self.draw = function(){
 		
-	
+			var x = self.x - Player.list[playerId].x + WIDTH/2;
+			var y = self.y - Player.list[playerId].y + HEIGHT/2;
 			
 			ctx.drawImage(Img.ship,0,0,Img.ship.width,Img.ship.height,x-25,y-30,70,50);
 			ctx.fillText(self.number,x,y);
