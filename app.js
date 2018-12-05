@@ -38,7 +38,7 @@ var Entity = function(){
 	
 }
 
-var Rocket = function(id){
+var Rocket = function(id, x2, y2){
 	var self = Entity();
 	self.id = id;
 
@@ -55,15 +55,15 @@ var Rocket = function(id){
 	self.getInitPack = function(){
 		return{
 			id:self.id,
-			x:self.x,
-			y:self.y,
+			x:x2,
+			y:y2,
 		};
 	}
 
 	self.getUpdatePack = function(){
 		return{
-			x:self.x,
-			y:self.y,
+			x:x2,
+			y:y2,
 			id:self.id,
 		};
 	}
@@ -172,6 +172,7 @@ var Player = function(id){
 	return self;
 }
 Player.list = {};
+
 Player.onConnect = function(socket){
 	var player = Player(socket.id);
 	playerCount++;
@@ -189,7 +190,7 @@ Player.onConnect = function(socket){
 		else if(data.inputId==='d'){
 			player.db = data.state;
 		}else if(data.inputId==='f'){
-			var rocket = Rocket(socket.id);
+			var rocket = Rocket(socket.id, player.x+25, player.y-15);
 			rocketCount++;
 		}
 	});
