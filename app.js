@@ -160,6 +160,7 @@ Player.onConnect = function(socket){
 	
 	
 	socket.emit('init',{
+		playerId:socket.id,
 		player:Player.fullInit(),
 		star:Star.fullInit(),
 	});
