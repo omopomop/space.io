@@ -69,12 +69,16 @@ var Player = function(id){
 			if(self.accelHoriz<self.maxSpd)
 				self.accelHoriz+=.2;
 		}
-		else
-			self.spdX = 0;
+		//else
+			//self.spdX = 0;
 		
 		//keeping acceleration same as long as vertical keys pressed and both horizontal not pressed
 		if(!self.lb && !self.rb){
 			self.accelHoriz = self.accelVert;
+			if(self.spdX > 0)
+				self.spdX-=.2;
+			else if(self.spdX < 0)
+				self.spdX+=.2;
 		}
 		
 		if(self.ub){
@@ -87,16 +91,28 @@ var Player = function(id){
 			if(self.accelVert<self.maxSpd)
 				self.accelVert+=.2;
 		}
-		else
-			self.spdY=0;
+		//else
+			//self.spdY=0;
 		//keeping acceleration same as long as horizontal keys pressed and both vertical not pressed
 		if(!self.ub && !self.db){
-			self.accelVert = self.accelHoriz;
+				self.accelVert = self.accelHoriz;
+				if(self.spdY > 0)
+					self.spdY-=.2;
+				else if(self.spdY<0)
+					self.spdY+=.2;
 		}
 		//reset accel if nothing pressed
 		if(!self.ub && !self.db && !self.rb && !self.lb){
 			self.accelHoriz = .2;
 			self.accelVert = .2;
+			if(self.spdY > 0)
+				self.spdY-=.2;
+			else if(self.spdY<0)
+				self.spdY+=.2;
+			if(self.spdX > 0)
+				self.spdX-=.2;
+			else if(self.spdX<0)
+				self.spdX+=.2;
 		}
 		
 	}
