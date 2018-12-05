@@ -47,7 +47,7 @@ var Rocket = function(id, x2, y2){
 	var super_update = self.update;
 	self.update = function(){
 		//updates position in entity
-		self.accelVert+=10;
+		self.accelVert+=12;
 		super_update();
 	}
 
@@ -204,7 +204,7 @@ Player.onConnect = function(socket){
 }
 
 Rocket.fullInit = function(){
-	var rockets = {};
+	var rockets = [];
 	for(var i in Rocket.list){
 		rockets.push(Rocket.list[i].getInitPack());
 	}
