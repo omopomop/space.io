@@ -41,14 +41,13 @@ var Entity = function(){
 var Rocket = function(id, x2, y2){
 	var self = Entity();
 	self.id = id;
-
+	self.accelVert = 7;
 
 	
 	var super_update = self.update;
 	self.update = function(){
-		//updates speed
-		//self.updateSpd();
 		//updates position in entity
+		self.accelVert+=10;
 		super_update();
 	}
 
@@ -63,7 +62,7 @@ var Rocket = function(id, x2, y2){
 	self.getUpdatePack = function(){
 		return{
 			x:x2,
-			y:y2,
+			y:y2 - self.accelVert,
 			id:self.id,
 		};
 	}
