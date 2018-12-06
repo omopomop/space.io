@@ -23,7 +23,7 @@
 	 database.ref('Users/'+username).set({
 		 username: username,
 		 score: score,
-	 }
+	 });
  }
  
  
