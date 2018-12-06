@@ -328,7 +328,7 @@ io.sockets.on('connection',function(socket){
 	SOCKET_LIST[socket.id] = socket;
 	
 	socket.on('signedin',function(data){
-		console.log(data.username +" AND PW IS "+data.password);
+		console.log(data.username );
 		writeUserData(data.username,0);
 		tempuser = data.username;
 		Player.onConnect(socket);

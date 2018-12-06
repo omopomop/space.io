@@ -150,7 +150,7 @@ span.psw {
 	//var signinSignUp = document.getElementById('signin-signup');
 	
 	signinLogin.onclick = function(){
-		socket.emit('signedin',{username:signinUsername.value,password:signinPassword.value});
+		socket.emit('signedin',{username:signinUsername.value});
 		signin.style.display = 'none';
 		maingame.style.display = 'inline-block';
 	}
