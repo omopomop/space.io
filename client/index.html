@@ -117,7 +117,16 @@ span.psw {
 ></script>
 <script>	
 	var socket = io();
+	var signin = document.getElementById('signin');
+	var signinUsername = document.getElementById('signin-username');
+	var signinPassword = document.getElementById('signin-password');
+	var signinLogin = document.getElementById('signin-login');
+	var signinSignUp = document.getElementById('signin-signup');
 	
+	signinLogin.onclick = function(){
+		signin.style.display = 'none';
+		maingame.style.display = 'inline-block';
+	}
 	
 	
 	
