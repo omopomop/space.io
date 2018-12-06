@@ -192,10 +192,12 @@ var io = require('socket.io')(serv,{});
 io.sockets.on('connection',function(socket){
 	socket.id = Math.random();
 	SOCKET_LIST[socket.id] = socket;
-	Player.onConnect(socket);
 	
+	socket.on('signin',function(data){
+		console.log(data.username +" AND PW IS "+data.password);
+		Player.onConnect(socket);
+	});
 	
-
 	
 	socket.number = ""+Math.floor(10*Math.random());
 	
@@ -267,6 +269,8 @@ Star.fullInit = function(){
 	}
 	return stars;
 }
+
+
 Star.update = function(){
 	if(Math.random() < .02 && starCount < 30){
 		Star();

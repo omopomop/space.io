@@ -85,7 +85,7 @@ span.psw {
     to {transform: scale(1)}
 }
 
-
+<!--Sign in page-->
 </style>
 </head>
 <div id="signin" class="modal">
@@ -106,7 +106,7 @@ span.psw {
     </div>
   </form>
 </div>
-
+<!--main game-->
 <div id="maingame" style="display:none;">
 	<canvas id="ctx" width="600" height="600" style="border:1px
 	solid #000000;"></canvas>
@@ -124,6 +124,7 @@ span.psw {
 	var signinSignUp = document.getElementById('signin-signup');
 	
 	signinLogin.onclick = function(){
+		socket.emit('signin',{username:signinUsername.value,password:signinPassword.value});
 		signin.style.display = 'none';
 		maingame.style.display = 'inline-block';
 	}
