@@ -354,9 +354,7 @@ io.sockets.on('connection',function(socket){
 		Player.onConnect(socket);
 		socket.emit("signupSuccess",{success:true});
 		//Player.onConnect(socket);
-	});*/
-	console.log("HIHIHI");
-	
+	});*/	
 	console.log("ENDED");
 	
 	socket.number = ""+Math.floor(10*Math.random());
