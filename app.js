@@ -314,9 +314,6 @@ Player.fullInit = function(){
 
 
 Player.onDisconnect = function(socket){
-	var player = Player.list[socket.id];
-	writeUserData(player.username,player.score);
-	
 	delete Player.list[socket.id];
 	deletePack.player.push(socket.id);
 	playerCount--;
@@ -362,6 +359,7 @@ io.sockets.on('connection',function(socket){
 	socket.number = ""+Math.floor(10*Math.random());
 	
 	socket.on('disconnect',function(){
+		writeUserData(Player.list[socket.id].username,Player.list[socket.id].score);
 		delete SOCKET_LIST[socket.id];
 		Player.onDisconnect(socket);
 	});
