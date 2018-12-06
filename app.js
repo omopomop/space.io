@@ -38,17 +38,33 @@ var Entity = function(){
 	
 }
 
-var Rocket = function(id, x2, y2){
+var Rocket = function(id, player2, x2, y2){
 	var self = Entity();
 	self.id = id;
 	self.accelVert = 7;
+	self.remove = false;
 
 	
 	var super_update = self.update;
 	self.update = function(){
-		//updates position in entity
-		self.accelVert+=12;
+		//updates posisation in entity
+		self.accelVert+=.5;
 		super_update();
+
+		for(var i in Player.list){
+			var player = Player.list[i];
+			
+			if((x2 > player.x && x2 < player.x+50) && (self.y > player.y && y2 < player.y+70) && player !== player2){
+				//self.remove = true;
+				//Add if statement for only subtracting if not score >= 3
+					player.score = player.score - 3;
+					self.remove = true;
+			}
+
+			if(y2 < 0){
+				self.remove = true;
+			}
+		}
 	}
 
 	self.getInitPack = function(){
@@ -60,9 +76,11 @@ var Rocket = function(id, x2, y2){
 	}
 
 	self.getUpdatePack = function(){
+		y2 = y2-self.accelVert;
+		console.log(y2);
 		return{
 			x:x2,
-			y:y2 - self.accelVert,
+			y:y2,
 			id:self.id,
 		};
 	}
@@ -79,7 +97,13 @@ Rocket.update = function(){
 	for(var i in Rocket.list){
 		var rocket = Rocket.list[i];
 		rocket.update();
-		pack.push(rocket.getUpdatePack());
+		if(rocket.remove){
+			delete Rocket.list[i];
+			deletePack.rocket.push(rocket.id);
+			rocketCount--;
+		}
+		else
+			pack.push(rocket.getUpdatePack());
 	}
 	return pack;
 }
@@ -189,7 +213,7 @@ Player.onConnect = function(socket){
 		else if(data.inputId==='d'){
 			player.db = data.state;
 		}else if(data.inputId==='f'){
-			var rocket = Rocket(socket.id, player.x+25, player.y-15);
+			var rocket = Rocket(player.id, player, player.x+25, player.y-15);
 			rocketCount++;
 		}
 	});
@@ -210,7 +234,7 @@ Rocket.fullInit = function(){
 	}
 	return rockets;
 }
-
+/*
 Rocket.update = function(){
 	var pack=[];
 	for(var i in Rocket.list){
@@ -220,7 +244,7 @@ Rocket.update = function(){
 	}
 	return pack;
 }
-
+*/
 Player.fullInit = function(){
 	var players = [];
 	for(var i in Player.list){
