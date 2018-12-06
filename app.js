@@ -52,7 +52,6 @@ var Rocket = function(id, player2, x2, y2){
 	self.id = Math.random();
 	self.accelVert = 7;
 	self.remove = false;
-	console.log("Rocket count" + rocketCount);
 	
 	var super_update = self.update;
 	self.update = function(){
@@ -65,10 +64,13 @@ var Rocket = function(id, player2, x2, y2){
 			
 			y2 = y2-self.accelVert;
 
-			//(x2 > player.x && x2 < player.x+50) && (self.y > player.y && y2 < player.y+50)
 			if(x2 > player.x && x2 < player.x+50 && y2 > player.y && y2 < player.y+50 && player !== player2){
-				if(player.score >= 3){
-					player.score = player.score - 3;
+				dmg = player.score*.1;
+				dmg = Math.round(dmg);
+				if(dmg > 3){
+					player.score = player.score - dmg;
+				}else if(dmg <= 3 && player.score >2){
+					player.score = player.score-3;
 				}else{
 					player.score = 0;
 				}
@@ -90,8 +92,6 @@ var Rocket = function(id, player2, x2, y2){
 	}
 
 	self.getUpdatePack = function(){
-		//y2 = y2-self.accelVert;
-		//console.log(y2);
 		return{
 			x:x2,
 			y:y2,
@@ -112,11 +112,9 @@ Rocket.update = function(){
 		var rocket = Rocket.list[i];
 		rocket.update();
 		if(rocket.remove){
-			console.log("removing rocket");
 			delete Rocket.list[i];
 			deletePack.rocket.push(rocket.id);
 			rocketCount--;
-			console.log("rocket count after d "+rocketCount);
 		}
 		else
 			pack.push(rocket.getUpdatePack());
@@ -149,7 +147,6 @@ var Player = function(id){
 	
 	self.updateSpd = function(){
 		if(self.rb){
-			//console.log("RB IS BEING PRESSED");
 			self.spdX=self.accelHoriz;
 			if(self.accelHoriz<self.maxSpd)
 				self.accelHoriz+=.2;

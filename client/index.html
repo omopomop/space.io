@@ -230,7 +230,10 @@ span.psw {
 		self.y = iPack.y;
 
 		self.draw = function(){
-			ctx.drawImage(Img.rocket, 0, 0, Img.rocket.width, Img.rocket.height, self.x-25, self.y-30, 20, 20)
+			var x = self.x - Player.list[playerId].x + WIDTH/2;
+			var y = self.y - Player.list[playerId].y + HEIGHT/2;
+
+			ctx.drawImage(Img.rocket, 0, 0, Img.rocket.width, Img.rocket.height, x-30, y-30, 20, 20)
 		}
 
 		Rocket.list[self.id] = self;
