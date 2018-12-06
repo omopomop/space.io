@@ -16,8 +16,8 @@ var starCount = 0;
 var Entity = function(){
 	//simple entity containing x and y coordinates, a unique identifier, and its speed
 	var self = {
-		x:Math.floor(Math.random()*600)+10,
-		y:Math.floor(Math.random()*600)+10,
+		x:Math.floor(Math.random()*1000)+10,
+		y:Math.floor(Math.random()*1000)+10,
 		spdX:0,
 		spdY:0,
 		id:"",
@@ -302,9 +302,6 @@ setInterval(function(){
 		socket.emit('init',initPack);
 		socket.emit('update',pack);
 		socket.emit('delete',deletePack);
-	}
-	for(var i in initPack.star){
-		console.log("INIT PLAYER IS "+initPack.star[i].points);
 	}
 	initPack.player = [];
 	initPack.star = [];
