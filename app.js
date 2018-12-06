@@ -359,7 +359,6 @@ io.sockets.on('connection',function(socket){
 	socket.number = ""+Math.floor(10*Math.random());
 	
 	socket.on('disconnect',function(){
-		writeUserData(Player.list[socket.id].username,Player.list[socket.id].score);
 		delete SOCKET_LIST[socket.id];
 		Player.onDisconnect(socket);
 	});
