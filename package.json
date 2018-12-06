@@ -2,11 +2,14 @@
   "name": "spaceio",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js.js",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js"
   },
   "author": "",
+  "engines":{
+    "node": "10.x"
+  },
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.4",

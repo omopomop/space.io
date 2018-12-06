@@ -7,7 +7,7 @@
 	 res.sendFile(__dirname+'/client/index.html');
  });
  app.use('/client',express.static(__dirname+'/client'));
- serv.listen(1212);
+ serv.listen(process.env.PORT || 1212);
 
 var SOCKET_LIST = {};
 
