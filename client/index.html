@@ -129,6 +129,15 @@ span.psw {
 		maingame.style.display = 'inline-block';
 	}
 	
+	signinSignUp.onclick = function(){
+		socket.emit('signup',{username:signinUsername.value,password:signinPassword.value});
+		//signin.style.display = 'none';
+		//maingame.style.display = 'inline-block';
+	}
+	socket.on('signupSuccess',function(data){
+		alert("Signed up successfully, you may login now");
+	});
+	
 	
 	
 	var WIDTH = 600;

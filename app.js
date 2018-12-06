@@ -189,10 +189,18 @@ Player.update = function(){
 	return pack;
 }
 var io = require('socket.io')(serv,{});
+var signedupUsers = {};
 io.sockets.on('connection',function(socket){
 	socket.id = Math.random();
 	SOCKET_LIST[socket.id] = socket;
 	
+	socket.on('signup',function(data){
+		console.log("HIHI");
+		console.log("this is signing up player: "+data.username +" AND PW IS "+data.password);
+		signedupUsers[data.username] = data.password;
+		socket.emit("signupSuccess",{success:true});
+		Player.onConnect(socket);
+	});
 	socket.on('signin',function(data){
 		console.log(data.username +" AND PW IS "+data.password);
 		Player.onConnect(socket);
