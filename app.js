@@ -56,9 +56,12 @@ var Rocket = function(id, player2, x2, y2){
 			
 			y2 = y2-self.accelVert;
 
-			if((x2 > player.x && x2 < player.x+50) && (self.y > player.y && y2 < player.y+50) && player !== player2){
+			//(x2 > player.x && x2 < player.x+50) && (self.y > player.y && y2 < player.y+50)
+			if(x2 > player.x && x2 < player.x+50 && y2 > player.y && y2 < player.y+50 && player !== player2){
 				if(player.score >= 3){
 					player.score = player.score - 3;
+				}else{
+					player.score = 0;
 				}
 				self.remove = true;
 			}
