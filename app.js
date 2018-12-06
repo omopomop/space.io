@@ -13,6 +13,8 @@ var SOCKET_LIST = {};
 
 var playerCount = 0;
 var starCount = 0;
+var rocketCount = 0;
+
 var Entity = function(){
 	//simple entity containing x and y coordinates, a unique identifier, and its speed
 	var self = {
@@ -44,6 +46,84 @@ var Entity = function(){
 	return self;
 	
 }
+
+var Rocket = function(id, player2, x2, y2){
+	var self = Entity();
+	self.id = Math.random();
+	self.accelVert = 7;
+	self.remove = false;
+	console.log("Rocket count" + rocketCount);
+	
+	var super_update = self.update;
+	self.update = function(){
+		//updates posisation in entity
+		self.accelVert+=.5;
+		super_update();
+
+		for(var i in Player.list){
+			var player = Player.list[i];
+			
+			y2 = y2-self.accelVert;
+
+			//(x2 > player.x && x2 < player.x+50) && (self.y > player.y && y2 < player.y+50)
+			if(x2 > player.x && x2 < player.x+50 && y2 > player.y && y2 < player.y+50 && player !== player2){
+				if(player.score >= 3){
+					player.score = player.score - 3;
+				}else{
+					player.score = 0;
+				}
+				self.remove = true;
+			}
+
+			if(y2 < 0){
+				self.remove = true;
+			}
+		}
+	}
+
+	self.getInitPack = function(){
+		return{
+			id:self.id,
+			x:x2,
+			y:y2,
+		};
+	}
+
+	self.getUpdatePack = function(){
+		//y2 = y2-self.accelVert;
+		//console.log(y2);
+		return{
+			x:x2,
+			y:y2,
+			id:self.id,
+		};
+	}
+	
+	Rocket.list[self.id] = self;
+	initPack.rocket.push(self.getInitPack());
+	return self;
+
+
+}
+Rocket.list = {};
+Rocket.update = function(){
+	var pack=[];
+	for(var i in Rocket.list){
+		var rocket = Rocket.list[i];
+		rocket.update();
+		if(rocket.remove){
+			console.log("removing rocket");
+			delete Rocket.list[i];
+			deletePack.rocket.push(rocket.id);
+			rocketCount--;
+			console.log("rocket count after d "+rocketCount);
+		}
+		else
+			pack.push(rocket.getUpdatePack());
+	}
+	return pack;
+}
+
 var Player = function(id){
 	var self = Entity();
 
@@ -151,13 +231,13 @@ var Player = function(id){
 	return self;
 }
 Player.list = {};
+
 Player.onConnect = function(socket){
 	var player = Player(socket.id);
 	player.username = tempuser;
 	console.log("PLAYER ON CONNECT USERNAME IS "+player.username);
 	playerCount++;
 	socket.on('keyPress',function(data){
-		
 		if(data.inputId==='l'){
 			player.lb = data.state;
 		}
@@ -169,6 +249,11 @@ Player.onConnect = function(socket){
 		}
 		else if(data.inputId==='d'){
 			player.db = data.state;
+		}else if(data.inputId==='f'){
+			if(rocketCount < 1){
+				Rocket(player.id, player, player.x+25, player.y-15);
+				rocketCount++;
+			}
 		}
 	});
 	
@@ -179,8 +264,18 @@ Player.onConnect = function(socket){
 		player:Player.fullInit(),
 		star:Star.fullInit(),
 		username:player.username,
+		rocket:Rocket.fullInit(),
 	});
 }
+
+Rocket.fullInit = function(){
+	var rockets = [];
+	for(var i in Rocket.list){
+		rockets.push(Rocket.list[i].getInitPack());
+	}
+	return rockets;
+}
+
 Player.fullInit = function(){
 	var players = [];
 	for(var i in Player.list){
@@ -324,14 +419,15 @@ Star.update = function(){
 	}
 	return pack;
 }
-var initPack = {player:[], star:[]};
-var deletePack = {player:[], star:[]};
+var initPack = {player:[], star:[], rocket: []};
+var deletePack = {player:[], star:[], rocket: []};
 
 
 setInterval(function(){
 	var pack = {
 		player:Player.update(),
 		star:Star.update(),
+		rocket:Rocket.update(),
 		
 	}
 	for(var i in SOCKET_LIST){
@@ -342,8 +438,10 @@ setInterval(function(){
 	}
 	initPack.player = [];
 	initPack.star = [];
+	initPack.rocket = [];
 	deletePack.player = [];
 	deletePack.star = [];
+	deletePack.rocket = [];
 },1000/25);
 
 

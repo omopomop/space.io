@@ -161,6 +161,10 @@ span.psw {
 	Img.star3.src = '/client/img/star3.png';
 	Img.star4 = new Image();
 	Img.star4.src = '/client/img/star4.png';
+	Img.star = new Image();
+	Img.star.src = '/client/img/star.png';
+	Img.rocket = new Image();
+	Img.rocket.src = '/client/img/rocket.png';
 	
 	var ctx = document.getElementById("ctx").getContext("2d");
 	ctx.font = '25px Arial';
@@ -219,7 +223,23 @@ span.psw {
 	}
 	Star.list = {};
 	
+	var Rocket = function(iPack){
+		var self = {};
+		self.id = iPack.id;
+		self.x = iPack.x;
+		self.y = iPack.y;
 
+		self.draw = function(){
+			ctx.drawImage(Img.rocket, 0, 0, Img.rocket.width, Img.rocket.height, self.x-25, self.y-30, 20, 20)
+		}
+
+		Rocket.list[self.id] = self;
+		return self;
+
+	}
+	Rocket.list = {};
+
+	var socket = io();
 	
 	var playerId = null;
 	socket.on('init',function(data){
@@ -232,7 +252,10 @@ span.psw {
 		}
 		for(var i = 0; i < data.star.length; i++){
 			new Star(data.star[i]);
-		}		
+		}
+		for(var i = 0; i < data.rocket.length; i++){
+			new Rocket(data.rocket[i]);
+		}
 	});
 	
 	socket.on('update',function(data){
@@ -260,6 +283,18 @@ span.psw {
 			}
 			
 		}
+		for(var i = 0; i < data.rocket.length; i++){
+			var pack = data.rocket[i];
+			var p = Rocket.list[pack.id];
+			if(p){
+				if(pack.x !== undefined)
+					p.x = pack.x;
+				if(pack.y !== undefined)
+					p.y = pack.y;
+				if(pack.score !== undefined)
+					p.score = pack.score;
+			}
+		}
 	});
 	
 	socket.on('delete',function(data){
@@ -267,6 +302,8 @@ span.psw {
 			delete Player.list[data.player[i]];
 		for(var i = 0; i < data.star.length; i++)
 			delete Star.list[data.star[i]];
+		for(var i = 0; i < data.rocket.length; i++)
+			delete Rocket.list[data.rocket[i]];
 	});
 	
 	setInterval(function(){
@@ -278,8 +315,12 @@ span.psw {
 		for(var i in Player.list){
 			Player.list[i].draw();
 		}
-		for(var i in Star.list)
+		for(var i in Star.list){
 			Star.list[i].draw();
+		}
+		for(var i in Rocket.list){
+			Rocket.list[i].draw();
+		}
 	},40);
 		
 	var drawMap = function(){
@@ -297,6 +338,8 @@ span.psw {
 			socket.emit('keyPress',{inputId:'l',state:true});
 		else if(event.keyCode === 87)
 			socket.emit('keyPress',{inputId:'u',state:true});
+		else if(event.keyCode === 32)
+			socket.emit('keyPress', {inputId: 'f', state:true});
 	}
 	
 	document.onkeyup = function(event){
@@ -308,5 +351,7 @@ span.psw {
 			socket.emit('keyPress',{inputId:'l',state:false});
 		else if(event.keyCode === 87)
 			socket.emit('keyPress',{inputId:'u',state:false});
+		else if(event.keyCode === 32)
+			socket.emit('keyPress', {inputId: 'f', state:false});
 	}
 </script>
