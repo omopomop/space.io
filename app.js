@@ -40,10 +40,10 @@ var Entity = function(){
 
 var Rocket = function(id, player2, x2, y2){
 	var self = Entity();
-	self.id = id;
+	self.id = Math.random();
 	self.accelVert = 7;
 	self.remove = false;
-
+	console.log("Rocket count" + rocketCount);
 	
 	var super_update = self.update;
 	self.update = function(){
@@ -82,7 +82,7 @@ var Rocket = function(id, player2, x2, y2){
 
 	self.getUpdatePack = function(){
 		//y2 = y2-self.accelVert;
-		console.log(y2);
+		//console.log(y2);
 		return{
 			x:x2,
 			y:y2,
@@ -90,7 +90,7 @@ var Rocket = function(id, player2, x2, y2){
 		};
 	}
 	
-	Rocket.list[id] = self;
+	Rocket.list[self.id] = self;
 	initPack.rocket.push(self.getInitPack());
 	return self;
 
@@ -103,9 +103,11 @@ Rocket.update = function(){
 		var rocket = Rocket.list[i];
 		rocket.update();
 		if(rocket.remove){
+			console.log("removing rocket");
 			delete Rocket.list[i];
 			deletePack.rocket.push(rocket.id);
 			rocketCount--;
+			console.log("rocket count after d "+rocketCount);
 		}
 		else
 			pack.push(rocket.getUpdatePack());
@@ -217,8 +219,10 @@ Player.onConnect = function(socket){
 		else if(data.inputId==='d'){
 			player.db = data.state;
 		}else if(data.inputId==='f'){
-			var rocket = Rocket(player.id, player, player.x+25, player.y-15);
-			rocketCount++;
+			if(rocketCount < 1){
+				Rocket(player.id, player, player.x+25, player.y-15);
+				rocketCount++;
+			}
 		}
 	});
 	
