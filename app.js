@@ -3,8 +3,6 @@
  var app = express();
  var serv = require('http').Server(app);
  var firebase = require('firebase/app');
- require("firebase/database");
- 
  var config = {
 
     apiKey: "AIzaSyBwD5Px_6lNBN7HakWt1iZb_PLJ5Rc2Bcc",
@@ -15,7 +13,7 @@
     messagingSenderId: "843043455922"
   };
  firebase.initializeApp(config);
- 
+ require("firebase/database");
  var database = firebase.database();
  
  var writeUserData = function(username, score){
