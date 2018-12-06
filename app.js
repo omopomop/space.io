@@ -2,6 +2,30 @@
  var express = require('express');
  var app = express();
  var serv = require('http').Server(app);
+ var firebase = require('firebase/app');
+ require("firebase/database");
+ 
+ var config = {
+
+    apiKey: "AIzaSyBwD5Px_6lNBN7HakWt1iZb_PLJ5Rc2Bcc",
+    authDomain: "cs252-77faa.firebaseapp.com",
+    databaseURL: "https://cs252-77faa.firebaseio.com",
+    projectId: "cs252-77faa",
+    storageBucket: "cs252-77faa.appspot.com",
+    messagingSenderId: "843043455922"
+  };
+ firebase.initializeApp(config);
+ 
+ var database = firebase.database();
+ 
+ var writeUserData = function(username, score){
+	 console.log("USERNAME IS "+username);
+	 database.ref('Users/'+username).set({
+		 username: username,
+		 score: score,
+	 }
+ }
+ 
  
  app.get('/',function(req,res){
 	 res.sendFile(__dirname+'/client/index.html');
@@ -305,13 +329,14 @@ io.sockets.on('connection',function(socket){
 	
 	socket.on('signedin',function(data){
 		console.log(data.username +" AND PW IS "+data.password);
+		writeUserData(data.username,0);
 		tempuser = data.username;
 		Player.onConnect(socket);
 		
 		console.log("TEMPUSER IS NOW "+tempuser);
 		socket.emit('signinSuccess',{success:true});
 	});
-	
+	/*
 	socket.on('signedup',function(data){
 		//console.log("HIHI");
 		//console.log("this is signing up player: "+data.username +" AND PW IS "+data.password);
@@ -319,7 +344,7 @@ io.sockets.on('connection',function(socket){
 		Player.onConnect(socket);
 		socket.emit("signupSuccess",{success:true});
 		//Player.onConnect(socket);
-	});
+	});*/
 	console.log("HIHIHI");
 	
 	console.log("ENDED");

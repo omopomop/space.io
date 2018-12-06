@@ -100,12 +100,16 @@ span.psw {
     <div class="container">
       <label><b>Username</b></label>
       <input id="signin-username" type="text" placeholder="Enter Username" name="uname" required>
-
+		
+		<!--pw
       <label><b>Password</b></label>
       <input id="signin-password" type="password" placeholder="Enter Password" name="psw" required>
-        
-      <button type="button" id="signin-login">Login</button>
+        -->
+      <button type="button" id="signin-login">Start</button>
+	  <!--signup
 	  <button type="button" id="signin-signup">Sign Up</button>
+	  -->
+	  
     </div>
   </form>
 </div>
@@ -115,6 +119,24 @@ span.psw {
 	solid #000000;"></canvas>
 	
 </div>
+<script src="https://www.gstatic.com/firebasejs/5.6.0/firebase.js"></script>
+
+<script>
+
+  // Initialize Firebase
+  var config = {
+
+    apiKey: "AIzaSyBwD5Px_6lNBN7HakWt1iZb_PLJ5Rc2Bcc",
+    authDomain: "cs252-77faa.firebaseapp.com",
+    databaseURL: "https://cs252-77faa.firebaseio.com",
+    projectId: "cs252-77faa",
+    storageBucket: "cs252-77faa.appspot.com",
+    messagingSenderId: "843043455922"
+  };
+
+  firebase.initializeApp(config);
+
+</script>
 
 <script src="http://cdn.socket.io/socket.io-1.4.5.js"
 ></script>
@@ -123,21 +145,21 @@ span.psw {
 	
 	var signin = document.getElementById('signin');
 	var signinUsername = document.getElementById('signin-username');
-	var signinPassword = document.getElementById('signin-password');
+	//var signinPassword = document.getElementById('signin-password');
 	var signinLogin = document.getElementById('signin-login');
-	var signinSignUp = document.getElementById('signin-signup');
+	//var signinSignUp = document.getElementById('signin-signup');
 	
 	signinLogin.onclick = function(){
 		socket.emit('signedin',{username:signinUsername.value,password:signinPassword.value});
 		signin.style.display = 'none';
 		maingame.style.display = 'inline-block';
 	}
-	
+	/*
 	signinSignUp.onclick = function(){
 		socket.emit('signedup',{username:signinUsername.value,password:signinPassword.value});
 		signin.style.display = 'none';
 		maingame.style.display = 'inline-block';
-	}
+	}*/
 	
 	/*socket.on('signupSuccess',function(data){
 		alert("Signed up successfully, you may login now");
