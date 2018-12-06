@@ -16,8 +16,8 @@ var starCount = 0;
 var Entity = function(){
 	//simple entity containing x and y coordinates, a unique identifier, and its speed
 	var self = {
-		x:Math.floor(Math.random()*1000)+10,
-		y:Math.floor(Math.random()*1000)+10,
+		x:Math.floor(Math.random()*1000)+300,
+		y:Math.floor(Math.random()*1000)+300,
 		spdX:0,
 		spdY:0,
 		id:"",
@@ -26,6 +26,15 @@ var Entity = function(){
 	self.update = function(){
 		self.x += self.spdX;
 		self.y += self.spdY;
+		if(self.x < 300)
+			self.x = 300;
+		if(self.x > 1300)
+			self.x = 1300;
+		if(self.y < 300)
+			self.y = 300;
+		if(self.y > 1300)
+			self.y = 1300;
+			
 	}
 	//returns distance between current entity and the passed in object
 	self.getDistance = function(obj){
@@ -48,6 +57,7 @@ var Player = function(id){
 	self.maxSpd = 5;
 	self.accelHoriz = .2;
 	self.accelVert = .2;
+	self.username = tempuser;
 	
 	var super_update = self.update;
 	self.update = function(){
@@ -117,12 +127,14 @@ var Player = function(id){
 		
 	}
 	self.getInitPack = function(){
+		console.log("USERNAME IS "+self.username);
 		return{
 			id:self.id,
 			x:self.x,
 			y:self.y,
 			number:self.number,
 			score:self.score,
+			username:self.username,
 		};
 	}
 	self.getUpdatePack = function(){
@@ -131,6 +143,7 @@ var Player = function(id){
 			y:self.y,
 			id:self.id,
 			score:self.score,
+			username:self.username,
 		};
 	}
 	Player.list[id] = self;
@@ -140,6 +153,8 @@ var Player = function(id){
 Player.list = {};
 Player.onConnect = function(socket){
 	var player = Player(socket.id);
+	player.username = tempuser;
+	console.log("PLAYER ON CONNECT USERNAME IS "+player.username);
 	playerCount++;
 	socket.on('keyPress',function(data){
 		
@@ -163,6 +178,7 @@ Player.onConnect = function(socket){
 		playerId:socket.id,
 		player:Player.fullInit(),
 		star:Star.fullInit(),
+		username:player.username,
 	});
 }
 Player.fullInit = function(){
@@ -190,22 +206,31 @@ Player.update = function(){
 }
 var io = require('socket.io')(serv,{});
 var signedupUsers = {};
+var tempuser = "";
 io.sockets.on('connection',function(socket){
 	socket.id = Math.random();
 	SOCKET_LIST[socket.id] = socket;
 	
-	socket.on('signup',function(data){
-		console.log("HIHI");
-		console.log("this is signing up player: "+data.username +" AND PW IS "+data.password);
-		signedupUsers[data.username] = data.password;
-		socket.emit("signupSuccess",{success:true});
-		Player.onConnect(socket);
-	});
-	socket.on('signin',function(data){
+	socket.on('signedin',function(data){
 		console.log(data.username +" AND PW IS "+data.password);
+		tempuser = data.username;
 		Player.onConnect(socket);
+		
+		console.log("TEMPUSER IS NOW "+tempuser);
+		socket.emit('signinSuccess',{success:true});
 	});
 	
+	socket.on('signedup',function(data){
+		//console.log("HIHI");
+		//console.log("this is signing up player: "+data.username +" AND PW IS "+data.password);
+		//signedupUsers[data.username] = data.password;
+		Player.onConnect(socket);
+		socket.emit("signupSuccess",{success:true});
+		//Player.onConnect(socket);
+	});
+	console.log("HIHIHI");
+	
+	console.log("ENDED");
 	
 	socket.number = ""+Math.floor(10*Math.random());
 	
