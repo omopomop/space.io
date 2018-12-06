@@ -19,11 +19,13 @@
  var writeUserData = function(username, score){
 	 var ref = database.ref();
 	 var userRef = ref.child("Users");
+	 var usersRef = userRef.push();
+	 var usersRef = usersRef.push({
+		name: username,
+		score: score,
+	});
 	 console.log("USERNAME IS "+username);
-	 userRef.child(username).set({
-		 username: username,
-		 score: score,
-	 });
+	 
  }
  
  
