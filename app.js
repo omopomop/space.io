@@ -54,11 +54,13 @@ var Rocket = function(id, player2, x2, y2){
 		for(var i in Player.list){
 			var player = Player.list[i];
 			
-			if((x2 > player.x && x2 < player.x+50) && (self.y > player.y && y2 < player.y+70) && player !== player2){
-				//self.remove = true;
-				//Add if statement for only subtracting if not score >= 3
+			y2 = y2-self.accelVert;
+
+			if((x2 > player.x && x2 < player.x+50) && (self.y > player.y && y2 < player.y+50) && player !== player2){
+				if(player.score >= 3){
 					player.score = player.score - 3;
-					self.remove = true;
+				}
+				self.remove = true;
 			}
 
 			if(y2 < 0){
@@ -76,7 +78,7 @@ var Rocket = function(id, player2, x2, y2){
 	}
 
 	self.getUpdatePack = function(){
-		y2 = y2-self.accelVert;
+		//y2 = y2-self.accelVert;
 		console.log(y2);
 		return{
 			x:x2,
@@ -200,7 +202,6 @@ Player.onConnect = function(socket){
 	var player = Player(socket.id);
 	playerCount++;
 	socket.on('keyPress',function(data){
-		
 		if(data.inputId==='l'){
 			player.lb = data.state;
 		}
@@ -234,17 +235,7 @@ Rocket.fullInit = function(){
 	}
 	return rockets;
 }
-/*
-Rocket.update = function(){
-	var pack=[];
-	for(var i in Rocket.list){
-		var rocket = Rocket.list[i];
-		rocket.update();
-		pack.push(rocket.getUpdatePack());
-	}
-	return pack;
-}
-*/
+
 Player.fullInit = function(){
 	var players = [];
 	for(var i in Player.list){
