@@ -314,6 +314,9 @@ Player.fullInit = function(){
 
 
 Player.onDisconnect = function(socket){
+	var player = Player.list[socket.id];
+	
+
 	delete Player.list[socket.id];
 	deletePack.player.push(socket.id);
 	playerCount--;
