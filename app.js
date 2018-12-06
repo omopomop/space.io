@@ -17,12 +17,18 @@
  var database = firebase.database();
  
  var writeUserData = function(username, score){
-	 //var ref = database.ref();
+	 /*
+	 var ref = database.ref();
 	 var userRef = ref.child("Users");
-	 var usersRef = database.child("Users").push({
-		 username:username,
-		 score:score,
-	 });
+	 var usersRef = userRef.push();
+	 var usersRef = usersRef.push({
+		name: username,
+		score: score,
+	});*/
+	database.ref('Users/'+username).set({
+		username: username,
+		score: score,
+	});
 	 console.log("USERNAME IS "+username);
 	 
  }
