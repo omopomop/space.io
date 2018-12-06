@@ -344,7 +344,7 @@ var Star = function(){
 	
 	self.update = function(){
 		self.updateSpd();
-		if(self.timer++>200 && slef.pointmultiplier < 26){
+		if(self.timer++>200 && self.pointmultiplier < 26){
 			self.pointmultiplier+=1;
 			self.timer = 0;
 		}
