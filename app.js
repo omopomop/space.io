@@ -163,7 +163,7 @@ var Player = function(id){
 	self.lb = false;
 	self.ub = false;
 	self.db = false;
-	self.maxSpd = 5;
+	self.maxSpd = 20;
 	self.accelHoriz = .2;
 	self.accelVert = .2;
 	self.username = tempuser;
@@ -378,7 +378,7 @@ var Star = function(){
 	
 	self.update = function(){
 		self.updateSpd();
-		if(self.timer++>200 && self.pointmultiplier < 26){
+		if(self.timer++>50 && self.pointmultiplier < 26){
 			self.pointmultiplier+=1;
 			self.timer = 0;
 		}
@@ -431,7 +431,7 @@ Star.fullInit = function(){
 
 
 Star.update = function(){
-	if(Math.random() < .02 && starCount < 30){
+	if(Math.random() < .12 && starCount < 30){
 		Star();
 		starCount++;
 	}
